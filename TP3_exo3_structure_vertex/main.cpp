@@ -1,9 +1,15 @@
-// #include "glimac/default_shader.hpp"
+#include "cstddef"
+#include "glm/glm.hpp"
 #include "p6/p6.h"
+
+struct Vertex2DColor {
+    glm::vec2 position;
+    glm::vec3 color;
+};
 
 int main()
 {
-    auto ctx = p6::Context{{1280, 720, "TP3 EX2"}};
+    auto ctx = p6::Context{{1280, 720, "TP3 EX3"}};
     ctx.maximize_window();
 
     /*********************************
@@ -14,12 +20,18 @@ int main()
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    GLfloat vertices[] = {
-        -0.5f, -0.5f, 1.f, 0.f, 0.f, // first vertex
-        0.5f, -0.5f, 0.f, 1.f, 0.f,  // second vertex
-        0.0f, 0.5f, 0.f, 0.f, 1.f    // third vertex
+    // GLfloat vertices[] = {
+    //     -0.5f, -0.5f, 1.f, 0.f, 0.f, // first vertex
+    //     0.5f, -0.5f, 0.f, 1.f, 0.f,  // second vertex
+    //     0.0f, 0.5f, 0.f, 0.f, 1.f    // third vertex
+    // };
+    const Vertex2DColor vertices[] = {
+        Vertex2DColor{{-0.5f, -0.5f}, {1.f, 0.f, 0.f}}, // first vertex
+        Vertex2DColor{{0.5f, -0.5f}, {0.f, 1.f, 0.f}},  // second vertex
+        Vertex2DColor{{0.0f, 0.5f}, {0.f, 0.f, 1.f}},   // third vertex
     };
-    glBufferData(GL_ARRAY_BUFFER, 15 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+
+    glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vertex2DColor), vertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     GLuint vao = 1;
@@ -31,8 +43,8 @@ int main()
     glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
     glEnableVertexAttribArray(VERTEX_ATTR_COLOR);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(VERTEX_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
-    glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (const GLvoid*)(2 * sizeof(GLfloat)));
+    glVertexAttribPointer(VERTEX_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2DColor), offsetof(Vertex2DColor, position));
+    glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex2DColor), (const GLvoid*)(offsetof(Vertex2DColor, color)));
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
@@ -50,7 +62,6 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glBindVertexArray(vao);
-        // glimac::bind_default_shader();
         shader.use();
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);

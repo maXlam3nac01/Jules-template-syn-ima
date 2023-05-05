@@ -3,8 +3,8 @@
 
 int main()
 {
-    auto ctx = p6::Context{{1280, 720, "TP3 EX2"}};
-    ctx.maximize_window();
+    auto ctx = p6::Context{{720, 720, "TP4 EX1"}};
+    // ctx.maximize_window();
 
     /*********************************
      * HERE SHOULD COME THE INITIALIZATION CODE
@@ -26,8 +26,8 @@ int main()
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    static constexpr GLuint VERTEX_ATTR_POSITION = 3;
-    static constexpr GLuint VERTEX_ATTR_COLOR    = 8;
+    static constexpr GLuint VERTEX_ATTR_POSITION = 0;
+    static constexpr GLuint VERTEX_ATTR_COLOR    = 1;
     glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
     glEnableVertexAttribArray(VERTEX_ATTR_COLOR);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -37,8 +37,8 @@ int main()
     glBindVertexArray(0);
 
     const p6::Shader shader = p6::load_shader(
-        "shaders/triangle.vs.glsl",
-        "shaders/triangle.fs.glsl"
+        "shaders/grey2d.vs.glsl",
+        "shaders/grey2d.fs.glsl"
     );
 
     // Declare your infinite update loop.
